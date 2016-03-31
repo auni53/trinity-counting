@@ -65,12 +65,14 @@ def isDone(tally):
 def count(title, candidates, ballots, n=1):
   # print()
   # print("~~%s~~" % title)
-  table = {}
-  for key in candidates:
-    table[key] = []
-
   winners = []
+  tables = []
   while n > 0:
+
+    table = {}
+    for key in candidates:
+      table[key] = []
+
     validCandidates = candidates[:]
     validBallots = ballots[:]
     tally = getBlankTally(validCandidates)
@@ -109,13 +111,11 @@ def count(title, candidates, ballots, n=1):
           table[key].append('*')
         #   print(key, '*')
       r += 1
+    tables.append(table)
     winners.append(isDone(tally))
     n -= 1
-    # print()
-    # print("WINNERS", winners)
 
-  # return winners
-  return table
+  return tables
 
 def getN(title):
 
@@ -141,17 +141,32 @@ if __name__ == '__main__':
       positions = 1
     data = process(filename)
     if data:
+      print(data[0], data[1], positions)
       count(data[0], data[1], data[2], positions)
     else:
       print("File not found.")
   else:
     mypath = 'week2'
-    fileList = [f for f in listdir(mypath) if (isfile(join(mypath, f)) and f[0] != '.' and f.split('.')[1] != 'txt')]
+    fileList = [f for f in listdir(mypath) if (isfile(join(mypath, f)) and f[0] != '.' and f.split('.')[1] == 'xls')]
 
     # fileList = ['../excelfile (21).xls']
     for filename in fileList:
-      data = process('week2/' + filename)
-      result = count(data[0], data[1], data[2], getN(data[0]))
-      results[data[0]] = result
+      try:
+          data = process('week2/' + filename)
+      except UnicodeDecodeError:
+          print("--ERROR--")
+          print(filename)
+
+    #   print(data[0], filename)
+      if (getN(data[0]) == 3 or True):
+          result = count(data[0], data[1], data[2], getN(data[0]))
+
+          c = 0
+          while c < len(result):
+            title = data[0]
+            if len(result) > 1:
+              title += ' Winner #' + str(c + 1)
+            results[title] = result[c]
+            c += 1
 
     print(json.dumps(results))
