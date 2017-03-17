@@ -7,6 +7,7 @@ import pdb
 
 stop = pdb.set_trace
 
+
 def process(filename):
   '''
   filename -> (title, candidates, ballots)
@@ -31,7 +32,8 @@ def process(filename):
 
     candidates = []
     for b in ballots:
-      if (not b[winner_i] in candidates):
+      name = b[winner_i]
+      if (name not in candidates and name != 'Nadim Dabbous'):
         candidates.append(b[winner_i])
     return (title, candidates, ballots)
   
