@@ -41,7 +41,7 @@ def process(filename):
     candidates = []
     for b in ballots:
       name = b[0]
-      if (name not in candidates and name != 'xadim Dabbous'):
+      if (name not in candidates and name != 'Nadim Dabbous'):
         candidates.append(name)
     return (title, candidates, ballots)
   
