@@ -128,7 +128,7 @@ if __name__ == '__main__':
 
   results = {}
 
-  mypath = 'results/'
+  mypath = './'
   fileList = [f for f in listdir(mypath) if (isfile(join(mypath, f)) and f[0] != '.' and f.split('.')[1] == 'xls')]
   
   for filename in fileList:
