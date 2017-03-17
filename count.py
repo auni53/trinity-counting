@@ -20,21 +20,29 @@ def process(filename):
   
     csv_file = csv.reader(file, delimiter='\t')
     lines = list(csv_file)
+    nums = {}
 
     for l in lines:
       if start == 1:
-        ballots.append(l)
+        ballot = []
+        for i in [1, 2, 3, 4, 5, 6, 7]:
+            if i in nums:
+                ballot.append(l[nums[i]])
+        ballots.append(ballot)
       if title == 0:
+        header = l[:]
         title = l[0]
-        winner_i = l.index('Num1')
+        for item in header:
+          if 'Num' in item:
+            nums[int(item[-1])] = header.index(item)
       if l != [] and l[0] == 'socialyos':
         start = 1
 
     candidates = []
     for b in ballots:
-      name = b[winner_i]
-      if (name not in candidates and name != 'Nadim Dabbous'):
-        candidates.append(b[winner_i])
+      name = b[0]
+      if (name not in candidates and name != 'xadim Dabbous'):
+        candidates.append(name)
     return (title, candidates, ballots)
   
 def getBlankTally(candidates):
@@ -69,6 +77,7 @@ def count(title, candidates, ballots, n=1):
   print("~~%s~~" % title)
   winners = []
   tables = []
+
   while n > 0:
 
     table = {}
